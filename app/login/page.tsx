@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -8,42 +8,74 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs"
+import Link from "next/link";
 
 export default function Page() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center">
-      <Card className="md:w-1/3">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl">Login to your account</CardTitle>
-          <CardDescription>
-            Enter your email below to login
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="grid gap-4">
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground"></span>
-            </div>
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" placeholder="m@example.com" />
-          </div>
-          <div className="grid gap-2">
-            <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password" />
-          </div>
-        </CardContent>
-        <CardFooter>
-          <Button className="w-full">Login</Button>
-        </CardFooter>
-      </Card>
+    <div className="flex min-h-screen flex-col items-center justify-center bg-fixed"  style={{ 
+      backgroundImage: `url("/background.png")` 
+    }}>
+      <Tabs defaultValue="student" className="w-[400px] m-auto">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="student">I am a Student</TabsTrigger>
+          <TabsTrigger value="instruct">I am an Instructor</TabsTrigger>
+        </TabsList>
+        <TabsContent value="student">
+          <Card>
+            <CardHeader>
+              <CardTitle>Student Account</CardTitle>
+              <CardDescription>
+                Login in to your Student Account
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              <div className="space-y-1">
+                <Label htmlFor="name">Email</Label>
+                <Input id="name" placeholder="user@mail.com" />
+              </div>
+              <div className="space-y-1">
+                <Label htmlFor="username">Password</Label>
+                <Input id="username" type="password" placeholder="Enter your password" />
+              </div>
+            </CardContent>
+            <CardFooter className="content-center">
+              <Link href={"/home"}><Button className="bg-brand">Login</Button></Link>
+            </CardFooter>
+          </Card>
+        </TabsContent>
+        <TabsContent value="instruct">
+          <Card>
+            <CardHeader>
+              <CardTitle>Instructor Account</CardTitle>
+              <CardDescription>
+                Login if you are an instructor
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              <div className="space-y-1">
+                <Label htmlFor="name">Email</Label>
+                <Input id="name" placeholder="user@mail.com" />
+              </div>
+              <div className="space-y-1">
+                <Label htmlFor="username">Password</Label>
+                <Input id="username" type="password" placeholder="Enter your password" />
+              </div>
+            </CardContent>
+            <CardFooter>
+              <Link href={"/home"}><Button className="bg-brand">Login</Button></Link>
+            </CardFooter>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
