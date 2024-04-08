@@ -47,7 +47,9 @@ export default function Page() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button className="w-full">Login</Button>
+              <Link href={"/student"}>
+                <Button className="w-full">Login</Button>{" "}
+              </Link>
             </CardFooter>
           </Card>
         </TabsContent>
@@ -76,7 +78,9 @@ export default function Page() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button className="w-full">Login</Button>
+              <Link href={"/teacher"}>
+                <Button className="w-full">Login</Button>{" "}
+              </Link>
             </CardFooter>
           </Card>
         </TabsContent>
