@@ -1,20 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
-import React from "react";
-import Countdown from "react-countdown";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import Link from "next/link";
+import React, { useEffect } from "react";
+
 import {
   Card,
   CardContent,
@@ -23,8 +10,41 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
+import { data } from "@/app/utils/sampleTestData";
+import { useState } from "react";
+import clsx from "clsx";
+import {Header} from "./components/Header";
 
 const page = () => {
+
+
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [selectedOption, setSelectedOption] = useState(new Array(data.length).fill(null));
+  const [answeredCount,setAnsweredCount] = useState(0);
+
+  const handleOptionChange = (option:any) => {
+    setSelectedOption((prevOptions) => {
+      const updatedOptions = [...prevOptions];
+      updatedOptions[currentQuestion] = option;
+      return updatedOptions;
+    });
+  };
+
+  const handleNext = () => {
+    setCurrentQuestion((prev) => Math.min(prev + 1, data.length - 1));
+  };
+
+  const handleBack = () => {
+    setCurrentQuestion((prev) => Math.max(prev - 1, 0));
+  };
+ 
+  useEffect(() => {
+    setAnsweredCount(selectedOption.filter((option) => option !== null).length);
+  },[selectedOption])
+  const unansweredCount = data.length - answeredCount;
+  const handleSubmit = () => {
+    // Add logic to submit answers
+  };
   return (
     <div
       className="h-screen fixed w-screen"
@@ -32,54 +52,7 @@ const page = () => {
         backgroundImage: `url("/mcq_bg.png")`,
       }}
     >
-      <nav className="h-[100px] flex flex-row mt-10 rounded-md bg-white mb-10 mx-8">
-        <div className="flex-grow ml-20">
-          <div className="flex items-center content-center h-full">
-            <Image src="/logo.svg" width={50} height={50} alt="logo" />
-            <p className="ml-4 font-sans font-extrabold text-2xl">
-              Memory Reboot
-            </p>
-            </div>
-            </div>
-            <div>
-            <div className="flex flex-col justify-center content-center gap-2 m-4">
-              <Countdown
-                date={3599999 + Date.now()}
-                renderer={(prop) => (
-                  <span className="font-bold w-0 content-center">
-                    <span className="content-center">
-                      {prop.hours}:{prop.minutes}:{prop.seconds}
-                    </span>
-                  </span>
-                )}
-              />
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button variant="destructive">End test</Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>
-                      Are you absolutely sure?
-                    </AlertDialogTitle>
-                    <AlertDialogDescription>
-                      This will submit your test.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <Link href="/home">
-                      <AlertDialogAction className="bg-brand">
-                        Submit
-                      </AlertDialogAction>
-                    </Link>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            </div>
-          </div>
-        
-      </nav>
+      <Header/>
       <div className="flex flex-row m-10 space-x-4 h-[70%]">
         <Card className="h-full w-[25%] rounded-lg bg-purple-600 p-5 border-0">
           <CardHeader>
@@ -87,70 +60,30 @@ const page = () => {
             <CardDescription className="text-white">MCQs</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-rows-5 grid-cols-5 gap-1 *:h-[40px] *:text-sm ">
-              <div className="p-2 bg-white rounded-sm font-semibold text-slate-700">
-                Q. 1
-              </div>
-              <div className="p-2 bg-white rounded-sm font-semibold text-slate-700">
-                Q. 2
-              </div>
-              <div className="p-2 bg-white rounded-sm font-semibold text-slate-700">
-                Q. 3
-              </div>
-              <div className="p-2 bg-white rounded-sm font-semibold text-slate-700">
-                Q. 4
-              </div>
-              <div className="p-2 bg-white rounded-sm font-semibold text-slate-700">
-                Q. 5
-              </div>
-              <div className="p-2 bg-white rounded-sm font-semibold text-slate-700">
-                Q. 6
-              </div>
-              <div className="p-2 bg-white rounded-sm font-semibold text-slate-700">
-                Q. 7
-              </div>
-              <div className="p-2 bg-white rounded-sm font-semibold text-slate-700">
-                Q. 8
-              </div>
-              <div className="p-2 bg-white rounded-sm font-semibold text-slate-700">
-                Q. 9
-              </div>
-              <div className="p-2 bg-white rounded-sm font-semibold text-slate-700">
-                Q. 10
-              </div>
-              <div className="p-2 bg-white rounded-sm font-semibold text-slate-700">
-                Q. 11
-              </div>
-              <div className="p-2 bg-white rounded-sm font-semibold text-slate-700">
-                Q. 12
-              </div>
-              <div className="p-2 bg-white rounded-sm font-semibold text-slate-700">
-                Q. 13
-              </div>
-              <div className="p-2 bg-white rounded-sm font-semibold text-slate-700">
-                Q. 14
-              </div>
-              <div className="p-2 bg-white rounded-sm font-semibold text-slate-700">
-                Q. 15
-              </div>
-              <div className="p-2 bg-white rounded-sm font-semibold text-slate-700">
-                Q. 16
-              </div>
-              <div className="p-2 bg-white rounded-sm font-semibold text-slate-700">
-                Q. 17
-              </div>
-              <div className="p-2 bg-white rounded-sm font-semibold text-slate-700">
-                Q. 18
+            <div className="overflow-y-auto h-[300px]">
+              <div className="grid grid-rows-5 grid-cols-5 gap-2">
+                {data.map((item: any, index: number) => (
+                  <Button
+                    key={index}
+                    onClick={() => setCurrentQuestion(index)}
+                    className={clsx("p-2 bg-white rounded-sm font-semibold text-slate-700 cursor-pointer",{
+                      "bg-red-500 text-white": currentQuestion === index,
+                      "bg-green-500 text-white":selectedOption[index] != null 
+                    })}
+                  >
+                    Q. {index + 1}
+                  </Button>
+                ))}
               </div>
             </div>
             <div className="progress font-semibold flex flex-col gap-5 text-white">
               <div className="flex gap-5 items-center">
-                <div className="p-2 bg-white rounded-sm font-semibold h-10 w-10 text-black" >10</div>
+                <div className="p-2 bg-white rounded-sm font-semibold h-10 w-10 text-black" >{data.length-answeredCount}</div>
                 <p>Unanswered</p>
               </div>
               <div className="flex gap-5 items-center">
                 <div className="p-2 bg-green-600 rounded-sm font-semibold h-10 w-10">
-                  12
+                  {answeredCount}
                 </div>
                 <p>Answered</p>
               </div>
@@ -164,50 +97,80 @@ const page = () => {
         <div className="bg-white flex flex-col flex-1 rounded-lg p-8">
           <div className="h-full">
             <h2 className="text-xl">
-              1. The data structure required to check whether an expression
-              contains a balanced parenthesis is?
+              {currentQuestion + 1} {data[currentQuestion].question}
             </h2>
             <div className="flex flex-col gap-5 m-5">
               <div className="flex items-center space-x-2">
-                <Checkbox id="ans1" />
+                <input
+                  type="radio"
+                  id="ans1"
+                  name="answer"
+                  value={data[currentQuestion].option1}
+                  checked={selectedOption[currentQuestion] === data[currentQuestion].option1}
+                  onChange={() => handleOptionChange(data[currentQuestion].option1)}
+                />
                 <label
                   htmlFor="ans1"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  className="text-sm font-medium leading-none cursor-pointer"
                 >
-                  Queue Data Structure
+                  {data[currentQuestion].option1}
                 </label>
               </div>
               <div className="flex items-center space-x-2">
-                <Checkbox id="ans2" />
+                <input
+                  type="radio"
+                  id="ans2"
+                  name="answer"
+                  value={data[currentQuestion].option2}
+                  checked={selectedOption[currentQuestion] === data[currentQuestion].option2}
+                  onChange={() => handleOptionChange(data[currentQuestion].option2)}
+                />
                 <label
                   htmlFor="ans2"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  className="text-sm font-medium leading-none cursor-pointer"
                 >
-                  Tree Data Structure
+                  {data[currentQuestion].option2}
                 </label>
               </div>
               <div className="flex items-center space-x-2">
-                <Checkbox id="ans3" />
+                <input
+                  type="radio"
+                  id="ans3"
+                  name="answer"
+                  value={data[currentQuestion].option3}
+                  checked={selectedOption[currentQuestion] === data[currentQuestion].option3}
+                  onChange={() => handleOptionChange(data[currentQuestion].option3)}
+                />
                 <label
                   htmlFor="ans3"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  className="text-sm font-medium leading-none cursor-pointer"
                 >
-                  Stack Data Structure
+                  {data[currentQuestion].option3}
                 </label>
               </div>
               <div className="flex items-center space-x-2">
-                <Checkbox id="ans4" />
+                <input
+                  type="radio"
+                  id="ans4"
+                  name="answer"
+                  value={data[currentQuestion].option4}
+                  checked={selectedOption[currentQuestion] === data[currentQuestion].option4}
+                  onChange={() => handleOptionChange(data[currentQuestion].option4)}
+                  
+                />
                 <label
                   htmlFor="ans4"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  className="text-sm font-medium leading-none cursor-pointer"
                 >
-                  Linked List Data Structure
+                  {data[currentQuestion].option4}
                 </label>
               </div>
             </div>
           </div>
-          <div className="flex justify-end mr-5">
-            <Button>Next</Button>
+          <div className="flex justify-around mr-5">
+            <Button onClick={handleBack}>Back</Button>
+            {currentQuestion < data.length - 1 && <Button onClick={handleNext}>Next</Button>}
+           { currentQuestion === data.length - 1 && <Button onClick={handleNext}>Submit</Button>}
           </div>
         </div>
       </div>
