@@ -14,6 +14,7 @@ import { data } from "@/app/utils/sampleTestData";
 import { useState } from "react";
 import clsx from "clsx";
 import {Header} from "./components/Header";
+import Link from "next/link";
 
 const page = () => {
 
@@ -170,7 +171,7 @@ const page = () => {
           <div className="flex justify-around mr-5">
             <Button onClick={handleBack}>Back</Button>
             {currentQuestion < data.length - 1 && <Button onClick={handleNext}>Next</Button>}
-           { currentQuestion === data.length - 1 && <Button onClick={handleNext}>Submit</Button>}
+           { currentQuestion === data.length - 1 && <Link href="/home"><Button variant={"destructive"} >Submit</Button></Link>}
           </div>
         </div>
       </div>
