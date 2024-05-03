@@ -1,5 +1,11 @@
 "use client";
 
+import { auth } from "@/lib/firebase";
+import { provider } from "@/lib/firebase";
+import firebase from "firebase/compat/app";
+
+import { FcGoogle } from "react-icons/fc";
+
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -18,6 +24,9 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs"
 import Link from "next/link";
+
+const signIn = () => auth.signInWithPopup(provider);
+const signOut = () => auth.signOut();
 
 export default function Page() {
   return (
@@ -51,8 +60,12 @@ export default function Page() {
                 <Input id="username" type="password" placeholder="Confirm your password" />
               </div>
             </CardContent>
-            <CardFooter className="content-center">
+            <CardFooter className="content-center flex flex-col">
               <Link href={"/"}><Button className="bg-brand">Register Now</Button></Link>
+              <p className="mt-4 text-gray-500" >Register with Google Id instead</p>
+              <span className="mt-4 cursor-pointer text-xl" onClick={signIn}>
+              <FcGoogle />
+              </span>
             </CardFooter>
           </Card>
         </TabsContent>
@@ -78,8 +91,12 @@ export default function Page() {
                 <Input id="username" type="password" placeholder="Confirm your password" />
               </div>
             </CardContent>
-            <CardFooter>
+            <CardFooter className="flex flex-col">
               <Link href={"/"}><Button className="bg-brand">Register Now</Button></Link>
+              <p className="mt-4 text-gray-500" >Register with Google Id instead</p>
+              <span className="mt-4 cursor-pointer text-xl" onClick={signIn}>
+              <FcGoogle />
+              </span>
             </CardFooter>
           </Card>
         </TabsContent>
