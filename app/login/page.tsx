@@ -1,6 +1,10 @@
 "use client";
-
+ import { auth } from "@/lib/firebase";
+import { provider } from "@/lib/firebase";
+import firebase from "firebase/compat/app";
 import { Button } from "@/components/ui/button"
+import { FcGoogle } from "react-icons/fc";
+
 import {
   Card,
   CardContent,
@@ -18,8 +22,22 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs"
 import Link from "next/link";
+import { useEffect } from "react";
+import { redirect } from "next/navigation";
+
+
+//signIn function
+const signIn = () => auth.signInWithPopup(provider);
+const signOut = () => auth.signOut();
+
 
 export default function Page() {
+
+
+  useEffect(() => {
+    
+  }, []);
+
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-fixed"  style={{ 
       backgroundImage: `url("/background.png")` 
@@ -47,8 +65,12 @@ export default function Page() {
                 <Input id="username" type="password" placeholder="Enter your password" />
               </div>
             </CardContent>
-            <CardFooter className="content-center">
+            <CardFooter className="content-center flex flex-col">
               <Link href={"/home"}><Button className="bg-brand">Login</Button></Link>
+              <p className="mt-4 text-gray-500" >Login with Google instead</p>
+              <span className="mt-4 cursor-pointer text-xl" onClick={signIn}>
+              <FcGoogle />
+              </span>
             </CardFooter>
           </Card>
         </TabsContent>
@@ -70,11 +92,17 @@ export default function Page() {
                 <Input id="username" type="password" placeholder="Enter your password" />
               </div>
             </CardContent>
-            <CardFooter>
+            <CardFooter className="flex flex-col">
               <Link href={"/home"}><Button className="bg-brand">Login</Button></Link>
+              <p className="mt-4 text-gray-500" >Login with Google instead</p>
+              <span className="mt-4 cursor-pointer text-xl" onClick={signIn}>
+              <FcGoogle />
+              </span>
             </CardFooter>
+            
           </Card>
         </TabsContent>
+        
       </Tabs>
     </div>
   );
