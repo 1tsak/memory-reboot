@@ -1,6 +1,10 @@
 "use client";
+ import { auth } from "@/lib/firebase";
+import { provider } from "@/lib/firebase";
+import firebase from "firebase/compat/app";
+import { Button } from "@/components/ui/button"
+import { FcGoogle } from "react-icons/fc";
 
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -8,89 +12,98 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+} from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs"
 import Link from "next/link";
+import { useEffect } from "react";
+import { redirect } from "next/navigation";
+
+
+//signIn function
+const signIn = () => auth.signInWithPopup(provider);
+const signOut = () => auth.signOut();
+
 
 export default function Page() {
+
+
+  useEffect(() => {
+    
+  }, []);
+
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center">
-      <Tabs defaultValue="student" className="w-[400px]">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-fixed"  style={{ 
+      backgroundImage: `url("/background.png")` 
+    }}>
+      <Tabs defaultValue="student" className="w-[400px] m-auto">
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="student">I'm a Student</TabsTrigger>
-          <TabsTrigger value="teacher">I'm a Teacher</TabsTrigger>
+          <TabsTrigger value="student">I am a Student</TabsTrigger>
+          <TabsTrigger value="instruct">I am an Instructor</TabsTrigger>
         </TabsList>
         <TabsContent value="student">
           <Card>
-            <CardHeader className="space-y-1">
-              <CardTitle className="text-2xl">Login to your account</CardTitle>
-              <CardDescription>Enter your email below to login</CardDescription>
+            <CardHeader>
+              <CardTitle>Student Account</CardTitle>
+              <CardDescription>
+                Login in to your Student Account
+              </CardDescription>
             </CardHeader>
-            <CardContent className="grid gap-4">
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t" />
-                </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-background px-2 text-muted-foreground"></span>
-                </div>
+            <CardContent className="space-y-2">
+              <div className="space-y-1">
+                <Label htmlFor="name">Email</Label>
+                <Input id="name" placeholder="user@mail.com" />
               </div>
-              <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" placeholder="m@example.com" />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="password">Password</Label>
-                <Input id="password" type="password" />
+              <div className="space-y-1">
+                <Label htmlFor="username">Password</Label>
+                <Input id="username" type="password" placeholder="Enter your password" />
               </div>
             </CardContent>
-            <CardFooter>
-              <Link href={"/student"}>
-                <Button className="w-full">Login</Button>{" "}
-              </Link>
+            <CardFooter className="content-center flex flex-col">
+              <Link href={"/home"}><Button className="bg-brand">Login</Button></Link>
+              <p className="mt-4 text-gray-500" >Login with Google instead</p>
+              <span className="mt-4 cursor-pointer text-xl" onClick={signIn}>
+              <FcGoogle />
+              </span>
             </CardFooter>
           </Card>
         </TabsContent>
-        <TabsContent value="teacher">
+        <TabsContent value="instruct">
           <Card>
-            <CardHeader className="space-y-1">
-              <CardTitle className="text-2xl">Login to your account</CardTitle>
-              <CardDescription>Enter your email below to login</CardDescription>
+            <CardHeader>
+              <CardTitle>Instructor Account</CardTitle>
+              <CardDescription>
+                Login if you are an instructor
+              </CardDescription>
             </CardHeader>
-            <CardContent className="grid gap-4">
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t" />
-                </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-background px-2 text-muted-foreground"></span>
-                </div>
+            <CardContent className="space-y-2">
+              <div className="space-y-1">
+                <Label htmlFor="name">Email</Label>
+                <Input id="name" placeholder="user@mail.com" />
               </div>
-              <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" placeholder="m@example.com" />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="password">Password</Label>
-                <Input id="password" type="password" />
+              <div className="space-y-1">
+                <Label htmlFor="username">Password</Label>
+                <Input id="username" type="password" placeholder="Enter your password" />
               </div>
             </CardContent>
-            <CardFooter>
-              <Link href={"/teacher"}>
-                <Button className="w-full">Login</Button>{" "}
-              </Link>
+            <CardFooter className="flex flex-col">
+              <Link href={"/home"}><Button className="bg-brand">Login</Button></Link>
+              <p className="mt-4 text-gray-500" >Login with Google instead</p>
+              <span className="mt-4 cursor-pointer text-xl" onClick={signIn}>
+              <FcGoogle />
+              </span>
             </CardFooter>
+            
           </Card>
         </TabsContent>
+        
       </Tabs>
-      <p className="m-2">
-        Don't Have an account?{" "}
-        <Link href="/signup">
-          <span className="text-blue-500 font-semibold">Register</span>
-        </Link>
-      </p>
     </div>
   );
 }
