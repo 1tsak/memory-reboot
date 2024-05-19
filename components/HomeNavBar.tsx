@@ -4,8 +4,25 @@ import { Button } from "./ui/button";
 import Link from "next/link";
 import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar";
 import { Bell } from "lucide-react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { getAuth, signOut } from "firebase/auth";
+import { useRouter } from "next/navigation";
 
 const HomeNavBar = () => {
+  const auth =getAuth();
+  const router = useRouter();
+  const signOutAccount=()=>{
+    signOut(auth).then(() => {
+      router.push("/login")
+    }).catch((error:any) => {
+      console.log(error.message);
+      
+    });
+  }
   return (
     <nav className="sticky z-50 p-4  backdrop-blur-lg bg-white   dark:bg-gray-950/90 text-brand">
       <div className="px-16">
@@ -40,10 +57,19 @@ const HomeNavBar = () => {
             </li>
           </ul>
           <div className="flex justify-center content-center align-bottom gap-10">
-            <Avatar>
-              <AvatarImage src="/avatar.jpg" className="object-center" />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Avatar>
+                  <AvatarImage src="/avatar.jpg" className="object-center" />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+              </PopoverTrigger>
+              <PopoverContent className="w-50">
+                <Button onClick={()=>signOutAccount()} variant="destructive">
+                  Logout
+                </Button>
+              </PopoverContent>
+            </Popover>
             <Bell className="place-self-center text-black" />
           </div>
         </div>

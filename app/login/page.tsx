@@ -22,20 +22,30 @@ import Link from "next/link";
 import { useEffect } from "react";
 import { redirect } from "next/navigation";
 import { ShowAlert } from "@/components/ShowAlert";
+import { useRouter } from "next/navigation";
 
 //signIn function
 
 export default function Page() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState({ title: "", des: "" });
   const [alert, setAlert] = useState(false);
   const [type, setType] = useState("");
   const signIn = () => {
-    auth.signInWithPopup(provider);
+    auth
+      .signInWithPopup(provider)
+      .then(() => {
+        console.log("logged in success!");
+        router.push("/home");
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
   };
   const signInWithEmail = () => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (password === "" || email === "") {
       setAlert(true);
       setError({
@@ -55,18 +65,19 @@ export default function Page() {
       setTimeout(() => setAlert(false), 2000);
       return;
     }
-    signInWithEmailAndPassword(auth,email,password).then((userCredentials)=>{
-        
-    }).catch((err)=>{
-      console.log(err.message);
-      setError({title:"Error!",des:err.message});
-    })
-
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredentials) => {
+        console.log(auth);
+        router.push("/home");
+      })
+      .catch((err) => {
+        console.log(err.message);
+        setError({ title: "Error!", des: err.message });
+      });
 
     // Proceed with sign-in if validation passes
     // ...
   };
-
 
   useEffect(() => {
     setEmail("");
@@ -126,9 +137,12 @@ export default function Page() {
                 Login
               </Button>
               <p className="mt-4 text-gray-500">OR</p>
-              <Button className="mt-4 flex gap-2 cursor-pointer text-xl" onClick={signIn}>
+              <Button
+                className="mt-4 flex gap-2 cursor-pointer text-xl"
+                onClick={signIn}
+              >
                 <FcGoogle />
-                <span className="text-sm">Login With Google</span> 
+                <span className="text-sm">Login With Google</span>
               </Button>
             </CardFooter>
           </Card>
@@ -166,9 +180,12 @@ export default function Page() {
                 Login
               </Button>
               <p className="mt-4 text-gray-500">OR</p>
-              <Button className="mt-4 flex gap-2 cursor-pointer text-xl" onClick={signIn}>
+              <Button
+                className="mt-4 flex gap-2 cursor-pointer text-xl"
+                onClick={signIn}
+              >
                 <FcGoogle />
-                <span className="text-sm">Login With Google</span> 
+                <span className="text-sm">Login With Google</span>
               </Button>
             </CardFooter>
           </Card>
