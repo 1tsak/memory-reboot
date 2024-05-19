@@ -20,11 +20,13 @@ import Link from "next/link";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { ShowAlert } from "@/components/ShowAlert";
 
 export default function Page() {
-  const router = useRouter()
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState({ title: "", des: "" });
   const [alert, setAlert] = useState(false);
   const [type, setType] = useState("");
@@ -32,8 +34,12 @@ export default function Page() {
   const signIn = () => {
     auth
       .signInWithPopup(provider)
-      .then(() => {router.push("/home")})
-      .catch((error) => {console.log(error.message)});
+      .then(() => {
+        router.push("/home");
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
   };
 
   const signUp = () => {
@@ -57,9 +63,21 @@ export default function Page() {
       setTimeout(() => setAlert(false), 2000);
       return;
     }
-    createUserWithEmailAndPassword(auth, email, password).then(()=>{
-      router.push("/login")
-    }).catch((error) => {console.log(error.message)});
+    if(password!==confirmPassword){
+      setAlert(true);
+      setError({
+        title: "Invalid Email",
+        des: "Please enter a valid email address",
+      });
+      setTimeout(() => setAlert(false), 2000);
+    }
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(() => {
+        router.push("/login");
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
   };
 
   return (
@@ -69,7 +87,14 @@ export default function Page() {
         backgroundImage: `url("/background.png")`,
       }}
     >
-      <Tabs onValueChange={(value: any) => setType(value)} defaultValue="student" className="w-[400px] m-auto">
+      {alert && (
+        <ShowAlert type="destructive" title={error.title} des={error.des} />
+      )}
+      <Tabs
+        onValueChange={(value: any) => setType(value)}
+        defaultValue="student"
+        className="w-[400px] m-auto"
+      >
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="student">Register as Student</TabsTrigger>
           <TabsTrigger value="instruct">Register as Instructor</TabsTrigger>
@@ -83,20 +108,29 @@ export default function Page() {
             <CardContent className="space-y-2">
               <div className="space-y-1">
                 <Label htmlFor="name">Email</Label>
-                <Input value={email} onChange={(e)=>setEmail(e.target.value)} id="name" placeholder="user@mail.com" />
+                <Input
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  id="name"
+                  placeholder="user@mail.com"
+                />
               </div>
               <div className="space-y-1">
                 <Label htmlFor="username">Password</Label>
                 <Input
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   id="password"
                   type="password"
                   placeholder="Enter your password"
                 />
               </div>
               <div className="space-y-1">
-                <Label htmlFor="username">Confirm Password</Label>
+                <Label htmlFor="cpassword">Confirm Password</Label>
                 <Input
-                  id="username"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  id="cpassword"
                   type="password"
                   placeholder="Confirm your password"
                 />
@@ -104,7 +138,7 @@ export default function Page() {
             </CardContent>
             <CardFooter className="content-center flex flex-col">
               <Link href={"/"}>
-                <Button className="bg-brand">Register Now</Button>
+                <Button onClick={signUp} className="bg-brand">Register Now</Button>
               </Link>
               <p className="mt-4 text-gray-500">
                 Register with Google Id instead
@@ -127,17 +161,17 @@ export default function Page() {
                 <Input id="name" placeholder="user@mail.com" />
               </div>
               <div className="space-y-1">
-                <Label htmlFor="username">Password</Label>
+                <Label htmlFor="password">Password</Label>
                 <Input
-                  id="username"
+                  id="password"
                   type="password"
                   placeholder="Enter your password"
                 />
               </div>
               <div className="space-y-1">
-                <Label htmlFor="username">Confirm Password</Label>
+                <Label htmlFor="cpassword">Confirm Password</Label>
                 <Input
-                  id="username"
+                  id="cpassword"
                   type="password"
                   placeholder="Confirm your password"
                 />
@@ -145,7 +179,7 @@ export default function Page() {
             </CardContent>
             <CardFooter className="flex flex-col">
               <Link href={"/"}>
-                <Button className="bg-brand">Register Now</Button>
+                <Button onClick={signUp} className="bg-brand">Register Now</Button>
               </Link>
               <p className="mt-4 text-gray-500">
                 Register with Google Id instead
