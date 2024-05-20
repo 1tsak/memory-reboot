@@ -47,7 +47,8 @@ export default function Page() {
   const signIn = () => {
     auth
       .signInWithPopup(provider)
-      .then(() => {
+      .then((result) => {
+        localStorage.setItem("user",JSON.stringify(result.user));
         console.log("logged in success!");
         router.push("/home");
       })

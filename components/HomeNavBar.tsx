@@ -1,6 +1,6 @@
 "use client"
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar";
@@ -15,6 +15,7 @@ import {auth} from "@/lib/firebase"
 import { useRouter } from "next/navigation";
 
 const HomeNavBar = () => {
+  const [user,setUser] = useState(()=>JSON.parse(localStorage.getItem("user")||""));
   const router = useRouter();
   const signOutAccount=()=>{
     signOut(auth).then(() => {
@@ -64,7 +65,7 @@ const HomeNavBar = () => {
             <Popover>
               <PopoverTrigger asChild>
                 <Avatar>
-                  <AvatarImage src="/avatar.jpg" className="object-center" />
+                  <AvatarImage src={user?.photoURL||"/avatar.jpg"} className="object-center" />
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
               </PopoverTrigger>

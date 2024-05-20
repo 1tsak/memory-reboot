@@ -35,6 +35,7 @@ import {
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import TestCard from "./TestCard";
+import { useState } from "react";
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
@@ -116,16 +117,18 @@ const data2 = [
 ];
 
 export default function StudentDashboard() {
+  const [user,setUser] = useState(()=>JSON.parse(localStorage.getItem("user")||""));
+
   return (
     <div className="h-full flex flex-row gap-5 p-10">
       <div className="flex flex-col flex-1 gap-2">
         <Card className=" flex bg-white p-5 justify-around rounded-xl shadow-sm">
           <div className="flex flex-col">
             <Avatar className="size-20">
-              <AvatarImage src="/avatar.jpg" className="object-center" />
+              <AvatarImage src={user?.photoURL || "./avatar.jpg"} className="object-center" />
               <AvatarFallback>Ak</AvatarFallback>
             </Avatar>
-            <h2 className="text-md font-semibold mt-1">Aakash Jha</h2>
+            <h2 className="text-md font-semibold mt-1">{user?.displayName}</h2>
             <span className="text-sm">Student</span>
             <Badge
               className=" py-2 px-5 flex gap-5 rounded-lg mt-2 -ml-2"
