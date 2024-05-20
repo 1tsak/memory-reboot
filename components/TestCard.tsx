@@ -21,7 +21,7 @@ const TestCard = ({ title, date, id = null }: any) => {
         <CardDescription className="text-lg font-semibold text-slate-800">
           {date} Test
         </CardDescription>
-        <Link href={"/test"}>
+        <Link href={`/test/${id}`}>
           <Button>Start</Button>
         </Link>
       </CardContent>

@@ -13,15 +13,18 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { data } from "@/app/utils/sampleTestData";
 import { useState } from "react";
 import clsx from "clsx";
-import {Header} from "./components/Header";
+import {Header} from "../components/Header";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 
 const page = () => {
-
+  const {slug} = useParams<any>();
+  const id = parseInt(slug)
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedOption, setSelectedOption] = useState(new Array(data.length).fill(null));
   const [answeredCount,setAnsweredCount] = useState(0);
+  const [quizData,setQuizData] = useState<any>(()=>JSON.parse(localStorage.getItem("upcomingQuiz") || "[]"))
 
   const handleOptionChange = (option:any) => {
     setSelectedOption((prevOptions) => {
@@ -63,7 +66,7 @@ const page = () => {
           <CardContent>
             <div className="overflow-y-scroll h-[250px]">
               <div className="grid grid-rows-5 grid-cols-5 gap-2">
-                {data.map((item: any, index: number) => (
+                { quizData[id] && quizData[id].quizData.map((item: any, index: number) => (
                   <Button
                     key={index}
                     onClick={() => setCurrentQuestion(index)}
@@ -98,7 +101,7 @@ const page = () => {
         <div className="bg-white flex flex-col flex-1 rounded-lg p-8">
           <div className="h-full">
             <h2 className="text-xl">
-              {currentQuestion + 1} {data[currentQuestion].question}
+              {currentQuestion + 1} {quizData&&quizData[id]["quizData"][currentQuestion].question}
             </h2>
             <div className="flex flex-col gap-5 m-5">
               <div className="flex items-center space-x-2">

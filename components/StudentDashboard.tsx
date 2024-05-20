@@ -281,7 +281,7 @@ export default function StudentDashboard() {
             <div>8h 30 m</div>
           </div>
         </Card>
-        {quizData.length>0 &&<TestCard title={quizData[0].name} date={quizData[0].date}/>}
+        {quizData.length>0 &&<TestCard title={quizData[0].name} date={quizData[0].date} id={0}/>}
       </div>
     </div>
   );

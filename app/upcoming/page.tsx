@@ -14,8 +14,8 @@ const page = () => {
         <h2>Upcoming Tests</h2>
         <div className="grid grid-cols-3 gap-5 w-full">
           {upcomingQuizes.length > 0 &&
-            upcomingQuizes.map((quiz: any) => (
-              <TestCard title={quiz.name} date={quiz.date} />
+            upcomingQuizes.map((quiz: any,index:number) => (
+              <TestCard title={quiz.name} date={quiz.date} id={index}/>
             ))}
         </div>
       </div>
