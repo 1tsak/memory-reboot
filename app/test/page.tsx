@@ -54,14 +54,14 @@ const page = () => {
       }}
     >
       <Header/>
-      <div className="flex flex-row m-10 space-x-4 h-[70%]">
-        <Card className="h-full w-[25%] rounded-lg bg-purple-600 p-5 border-0">
+      <div className="flex flex-row m-5 space-x-4 h-[70%]">
+        <Card className="h-full w-[25%] rounded-lg bg-purple-600 p-2 border-0">
           <CardHeader>
             <CardTitle className="text-lg text-white">DSA Test</CardTitle>
             <CardDescription className="text-white">MCQs</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="overflow-y-auto h-[300px]">
+            <div className="overflow-y-scroll h-[250px]">
               <div className="grid grid-rows-5 grid-cols-5 gap-2">
                 {data.map((item: any, index: number) => (
                   <Button
@@ -77,19 +77,19 @@ const page = () => {
                 ))}
               </div>
             </div>
-            <div className="progress font-semibold flex flex-col gap-5 text-white">
-              <div className="flex gap-5 items-center">
-                <div className="p-2 bg-white rounded-sm font-semibold h-10 w-10 text-black" >{data.length-answeredCount}</div>
+            <div className="progress font-semibold flex mt-2 flex-col gap-2 text-white">
+              <div className="flex text-sm gap-5 items-center">
+                <div className="p-2 bg-white rounded-sm font-semibold  text-black" >{data.length-answeredCount}</div>
                 <p>Unanswered</p>
               </div>
-              <div className="flex gap-5 items-center">
-                <div className="p-2 bg-green-600 rounded-sm font-semibold h-10 w-10">
+              <div className="flex gap-5 text-sm items-center">
+                <div className="p-2 bg-green-600 rounded-sm font-semibold ">
                   {answeredCount}
                 </div>
                 <p>Answered</p>
               </div>
-              <div className="flex gap-5 items-center">
-                <div className="p-2 bg-yellow-300 rounded-sm font-semibold h-10 w-10 text-black">3</div>
+              <div className="flex gap-5 text-sm items-center">
+                <div className="p-2 bg-yellow-300 rounded-sm font-semibold  text-black">3</div>
                 <p>Marked for Review</p>
               </div>
             </div>

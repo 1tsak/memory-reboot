@@ -33,6 +33,17 @@ export default function Page() {
   const [error, setError] = useState({ title: "", des: "" });
   const [alert, setAlert] = useState(false);
   const [type, setType] = useState("");
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        router.push("/home");
+      }
+    });
+
+    return () => unsubscribe();
+  }, [router]);
+  
   const signIn = () => {
     auth
       .signInWithPopup(provider)

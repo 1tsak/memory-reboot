@@ -27,7 +27,7 @@ const Content = () => {
                 <div className='flex flex-row justify-center gap-10' >
                     <Link href={"/home"}>
                         <Button className='bg-brand'>
-                            Get Started --->
+                            Get Started
                         </Button>
                     </Link>
                     <Link href={"/"} >

@@ -44,7 +44,7 @@ const HomeNavBar = () => {
           </div> */}
           <ul className="flex space-x-10 text-slate-600 font-semibold">
             <li>
-              <Link href="">Upcoming Tests</Link>
+              <Link href="/upcoming">Upcoming Tests</Link>
             </li>
             <li>
               <Link href="">Results</Link>

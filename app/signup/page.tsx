@@ -18,7 +18,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Link from "next/link";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ShowAlert } from "@/components/ShowAlert";
 
@@ -30,6 +30,16 @@ export default function Page() {
   const [error, setError] = useState({ title: "", des: "" });
   const [alert, setAlert] = useState(false);
   const [type, setType] = useState("");
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        router.push("/home");
+      }
+    });
+
+    return () => unsubscribe();
+  }, [router]);
 
   const signIn = () => {
     auth
@@ -63,7 +73,7 @@ export default function Page() {
       setTimeout(() => setAlert(false), 2000);
       return;
     }
-    if(password!==confirmPassword){
+    if (password !== confirmPassword) {
       setAlert(true);
       setError({
         title: "Invalid Email",
@@ -138,7 +148,9 @@ export default function Page() {
             </CardContent>
             <CardFooter className="content-center flex flex-col">
               <Link href={"/"}>
-                <Button onClick={signUp} className="bg-brand">Register Now</Button>
+                <Button onClick={signUp} className="bg-brand">
+                  Register Now
+                </Button>
               </Link>
               <p className="mt-4 text-gray-500">
                 Register with Google Id instead
@@ -179,7 +191,9 @@ export default function Page() {
             </CardContent>
             <CardFooter className="flex flex-col">
               <Link href={"/"}>
-                <Button onClick={signUp} className="bg-brand">Register Now</Button>
+                <Button onClick={signUp} className="bg-brand">
+                  Register Now
+                </Button>
               </Link>
               <p className="mt-4 text-gray-500">
                 Register with Google Id instead
