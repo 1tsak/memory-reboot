@@ -121,7 +121,7 @@ const Card1 = ()=>{
     return <div className='w-60 h-80 flex flex-col content-center justify-between rounded-lg overflow-hidden bg-white/90'>
         <img className='brightness-75' src={"/card1.png"}/>
         <p className='max-w-30 text-black font-medium content-end mb-4 p-4 flex-grow break-words'>
-        Empower Your Educational Institution with School Manager Pro --->
+        Empower Your Educational Institution with School Manager Pro -
         </p>
     </div>
 }

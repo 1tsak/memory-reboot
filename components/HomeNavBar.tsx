@@ -1,3 +1,4 @@
+"use client"
 import Image from "next/image";
 import React from "react";
 import { Button } from "./ui/button";
@@ -9,11 +10,11 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { getAuth, signOut } from "firebase/auth";
+import { signOut } from "firebase/auth";
+import {auth} from "@/lib/firebase"
 import { useRouter } from "next/navigation";
 
 const HomeNavBar = () => {
-  const auth =getAuth();
   const router = useRouter();
   const signOutAccount=()=>{
     signOut(auth).then(() => {
@@ -42,7 +43,10 @@ const HomeNavBar = () => {
             </Link>
             <Link href={"/login"}><Button size="lg" className="bg-brand">Login</Button></Link>
           </div> */}
-          <ul className="flex space-x-10 text-slate-600 font-semibold">
+          <ul className="flex space-x-10 text-slate-600 font-semibold cursor-pointer">
+            <li>
+              <Link href="/home">Dashboard</Link>
+            </li>
             <li>
               <Link href="/upcoming">Upcoming Tests</Link>
             </li>
@@ -52,9 +56,9 @@ const HomeNavBar = () => {
             <li>
               <Link href="">Profile</Link>
             </li>
-            <li>
+            {/* <li>
               <Link href="">Help</Link>
-            </li>
+            </li> */}
           </ul>
           <div className="flex justify-center content-center align-bottom gap-10">
             <Popover>

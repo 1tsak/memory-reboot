@@ -34,6 +34,7 @@ import {
 } from "recharts";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import TestCard from "./TestCard";
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
@@ -276,22 +277,7 @@ export default function StudentDashboard() {
             <div>8h 30 m</div>
           </div>
         </Card>
-        <Card>
-          <CardHeader className="flex flex-row justify-between">
-            <CardTitle className="text-md text-slate-500">
-              Today's Course
-            </CardTitle>
-            <ArrowRightIcon />
-          </CardHeader>
-          <CardContent className="flex flex-row justify-between">
-            <CardDescription className="text-lg font-semibold text-slate-800">
-              08 April Test
-            </CardDescription>
-            <Link href={"/test"}>
-              <Button>Start</Button>
-            </Link>
-          </CardContent>
-        </Card>
+        <TestCard title="Today's Course" date="21 May"/>
       </div>
     </div>
   );
