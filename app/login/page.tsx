@@ -79,7 +79,7 @@ export default function Page() {
     }
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
-        console.log(auth);
+        console.log(userCredentials);
         router.push("/home");
       })
       .catch((err) => {
