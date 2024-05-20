@@ -118,6 +118,7 @@ const data2 = [
 
 export default function StudentDashboard() {
   const [user,setUser] = useState(()=>JSON.parse(localStorage.getItem("user")||""));
+  const [quizData,setQuizData] = useState(()=>JSON.parse(localStorage.getItem("upcomingQuiz") || "[]"))
 
   return (
     <div className="h-full flex flex-row gap-5 p-10">
@@ -280,7 +281,7 @@ export default function StudentDashboard() {
             <div>8h 30 m</div>
           </div>
         </Card>
-        <TestCard title="Today's Course" date="21 May"/>
+        {quizData.length>0 &&<TestCard title={quizData[0].name} date={quizData[0].date}/>}
       </div>
     </div>
   );
