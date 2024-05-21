@@ -52,11 +52,11 @@ const HomeNavBar = () => {
               <Link href="/upcoming">Upcoming Tests</Link>
             </li>
             <li>
-              <Link href="">Results</Link>
+              <Link href="/results">Results</Link>
             </li>
-            <li>
+            {/* <li>
               <Link href="">Profile</Link>
-            </li>
+            </li> */}
             {/* <li>
               <Link href="">Help</Link>
             </li> */}

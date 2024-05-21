@@ -15,16 +15,18 @@ import { useState } from "react";
 import clsx from "clsx";
 import {Header} from "../components/Header";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams,useRouter } from "next/navigation";
 
 const page = () => {
   const {slug} = useParams<any>();
   const id = parseInt(slug)
+  const router = useRouter();
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [selectedOption, setSelectedOption] = useState(new Array(data.length).fill(null));
-  const [answeredCount,setAnsweredCount] = useState(0);
   const [quizData,setQuizData] = useState<any>(()=>JSON.parse(localStorage.getItem("upcomingQuiz") || "[]"))
+  const [selectedOption, setSelectedOption] = useState<Array<string | null>>(new Array(quizData[id].quizData.length).fill(null));
+  const [answeredCount,setAnsweredCount] = useState(0);
+  const [score, setScore] = useState<number | null>(null);
 
   const handleOptionChange = (option:any) => {
     setSelectedOption((prevOptions) => {
@@ -35,7 +37,7 @@ const page = () => {
   };
 
   const handleNext = () => {
-    setCurrentQuestion((prev) => Math.min(prev + 1, data.length - 1));
+    setCurrentQuestion((prev) => Math.min(prev + 1, quizData[id].quizData.length - 1));
   };
 
   const handleBack = () => {
@@ -45,9 +47,29 @@ const page = () => {
   useEffect(() => {
     setAnsweredCount(selectedOption.filter((option) => option !== null).length);
   },[selectedOption])
-  const unansweredCount = data.length - answeredCount;
+  const calculateScore = () => {
+    let correctAnswers = 0;
+    quizData[id].quizData.forEach((question: any, index: number) => {
+      if (selectedOption[index] === question.answer) {
+        correctAnswers++;
+      }
+    });
+    setScore(correctAnswers);
+    return correctAnswers
+  };
+
   const handleSubmit = () => {
-    // Add logic to submit answers
+    const score = calculateScore();
+    const results = JSON.parse(localStorage.getItem("results")||"[]");
+    const result = {
+      name:quizData[id].name,
+      totalQuestions:quizData[id].quizData.length,
+      correctAnswers:score,
+    }
+    results.push(result);
+    localStorage.setItem("result",JSON.stringify(results));
+    router.push("/home");
+
   };
   return (
     <div
@@ -56,7 +78,7 @@ const page = () => {
         backgroundImage: `url("/mcq_bg.png")`,
       }}
     >
-      <Header/>
+      <Header handleSubmit={handleSubmit}/>
       <div className="flex flex-row m-5 space-x-4 h-[70%]">
         <Card className="h-full w-[25%] rounded-lg bg-purple-600 p-2 border-0">
           <CardHeader>
@@ -101,7 +123,7 @@ const page = () => {
         <div className="bg-white flex flex-col flex-1 rounded-lg p-8">
           <div className="h-full">
             <h2 className="text-xl">
-              {currentQuestion + 1} {quizData&&quizData[id]["quizData"][currentQuestion].question}
+              {currentQuestion + 1} {quizData&&quizData[id].quizData[currentQuestion].question}
             </h2>
             <div className="flex flex-col gap-5 m-5">
               <div className="flex items-center space-x-2">
@@ -109,15 +131,15 @@ const page = () => {
                   type="radio"
                   id="ans1"
                   name="answer"
-                  value={data[currentQuestion].option1}
-                  checked={selectedOption[currentQuestion] === data[currentQuestion].option1}
-                  onChange={() => handleOptionChange(data[currentQuestion].option1)}
+                  value={quizData[id].quizData[currentQuestion].option1}
+                  checked={selectedOption[currentQuestion] === quizData[id].quizData[currentQuestion].option1}
+                  onChange={() => handleOptionChange(quizData[id].quizData[currentQuestion].option1)}
                 />
                 <label
                   htmlFor="ans1"
                   className="text-sm font-medium leading-none cursor-pointer"
                 >
-                  {data[currentQuestion].option1}
+                  {quizData[id].quizData[currentQuestion].option1}
                 </label>
               </div>
               <div className="flex items-center space-x-2">
@@ -125,15 +147,15 @@ const page = () => {
                   type="radio"
                   id="ans2"
                   name="answer"
-                  value={data[currentQuestion].option2}
-                  checked={selectedOption[currentQuestion] === data[currentQuestion].option2}
-                  onChange={() => handleOptionChange(data[currentQuestion].option2)}
+                  value={quizData[id].quizData[currentQuestion].option2}
+                  checked={selectedOption[currentQuestion] === quizData[id].quizData[currentQuestion].option2}
+                  onChange={() => handleOptionChange(quizData[id].quizData[currentQuestion].option2)}
                 />
                 <label
                   htmlFor="ans2"
                   className="text-sm font-medium leading-none cursor-pointer"
                 >
-                  {data[currentQuestion].option2}
+                  {quizData[id].quizData[currentQuestion].option1}
                 </label>
               </div>
               <div className="flex items-center space-x-2">
@@ -141,15 +163,15 @@ const page = () => {
                   type="radio"
                   id="ans3"
                   name="answer"
-                  value={data[currentQuestion].option3}
-                  checked={selectedOption[currentQuestion] === data[currentQuestion].option3}
-                  onChange={() => handleOptionChange(data[currentQuestion].option3)}
+                  value={quizData[id].quizData[currentQuestion].option3}
+                  checked={selectedOption[currentQuestion] === quizData[id].quizData[currentQuestion].option3}
+                  onChange={() => handleOptionChange(quizData[id].quizData[currentQuestion].option3)}
                 />
                 <label
                   htmlFor="ans3"
                   className="text-sm font-medium leading-none cursor-pointer"
                 >
-                  {data[currentQuestion].option3}
+                  {quizData[id].quizData[currentQuestion].option3}
                 </label>
               </div>
               <div className="flex items-center space-x-2">
@@ -157,16 +179,16 @@ const page = () => {
                   type="radio"
                   id="ans4"
                   name="answer"
-                  value={data[currentQuestion].option4}
-                  checked={selectedOption[currentQuestion] === data[currentQuestion].option4}
-                  onChange={() => handleOptionChange(data[currentQuestion].option4)}
+                  value={quizData[id].quizData[currentQuestion].option4}
+                  checked={selectedOption[currentQuestion] === quizData[id].quizData[currentQuestion].option4}
+                  onChange={() => handleOptionChange(quizData[id].quizData[currentQuestion].option4)}
                   
                 />
                 <label
                   htmlFor="ans4"
                   className="text-sm font-medium leading-none cursor-pointer"
                 >
-                  {data[currentQuestion].option4}
+                  {quizData[id].quizData[currentQuestion].option4}
                 </label>
               </div>
             </div>

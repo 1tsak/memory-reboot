@@ -15,7 +15,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
-export const Header = () => {
+export const Header = ({handleSubmit=undefined}:any) => {
   return (
     <div>      <nav className="h-[100px] flex flex-row mt-10 rounded-md bg-white mb-10 mx-8">
     <div className="flex-grow ml-20">
@@ -53,11 +53,11 @@ export const Header = () => {
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <Link href="/home">
-                  <AlertDialogAction className="bg-brand">
+                {/* <Link href="/home"> */}
+                  <AlertDialogAction onClick={handleSubmit} className="bg-brand">
                     Submit
                   </AlertDialogAction>
-                </Link>
+                {/* </Link> */}
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
