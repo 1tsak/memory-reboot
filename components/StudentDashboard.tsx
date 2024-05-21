@@ -119,6 +119,8 @@ const data2 = [
 export default function StudentDashboard() {
   const [user,setUser] = useState(()=>JSON.parse(localStorage.getItem("user")||""));
   const [quizData,setQuizData] = useState(()=>JSON.parse(localStorage.getItem("upcomingQuiz") || "[]"))
+  const [results,setResult] = useState(()=>JSON.parse(localStorage.getItem("result")||"[]"))
+
 
   return (
     <div className="h-full flex flex-row gap-5 p-10">
@@ -238,18 +240,18 @@ export default function StudentDashboard() {
               <h2 className="text-sm font-semibold my-1 text-slate-500">
                 New Tests
               </h2>
-              <h1 className="text-2xl font-semibold my-1 text-blue-500">08</h1>
+              <h1 className="text-2xl font-semibold my-1 text-blue-500">{quizData.length}</h1>
               <h2 className="text-sm font-semibold my-1 text-slate-500">
                 Visited
               </h2>
               <h1 className="text-2xl font-semibold my-1 text-purple-500">
-                13/<span className="text-purple-400">42</span>
+                {results.length}/<span className="text-purple-400">{quizData.length}</span>
               </h1>
               <h2 className="text-sm font-semibold my-1 text-slate-500">
                 Completed
               </h2>
               <h1 className="text-2xl font-semibold my-1 text-orange-500">
-                08/<span className="text-orange-400">12</span>
+              {results.length}/<span className="text-orange-400">{quizData.length}</span>
               </h1>
             </div>
             <div className="w-[400px] h-[200px]">

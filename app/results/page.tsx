@@ -13,7 +13,7 @@ const page = () => {
         <div className="grid grid-cols-3 gap-5 w-full">
           {results.length > 0 &&
             results.map((result: any,index:number) => (
-              <ResultCard title={result.name} date={result.correctAnswers} totalQuestions={result.totalQuestions}/>
+              <ResultCard title={result.name} correctAnswers={result.correctAnswers} totalQuestions={result.totalQuestions}/>
             ))}
         </div>
       </div>

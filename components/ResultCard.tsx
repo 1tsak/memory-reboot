@@ -10,7 +10,7 @@ import Link from "next/link";
 
 import { ArrowRightIcon } from "lucide-react";
 import { Button } from "./ui/button";
-const ResultCard = ({ title,correctAnswer,totalQuestions ,id = null }: any) => {
+const ResultCard = ({ title,correctAnswers,totalQuestions ,id = null }: any) => {
   return (
     <Card>
       <CardHeader className="flex flex-row justify-between">
@@ -19,7 +19,7 @@ const ResultCard = ({ title,correctAnswer,totalQuestions ,id = null }: any) => {
       </CardHeader>
       <CardContent className="flex flex-row justify-between">
         <CardDescription className="text-lg font-semibold text-slate-800">
-          Score: {correctAnswer}/{totalQuestions}
+          Score: {correctAnswers}/{totalQuestions}
         </CardDescription>
       </CardContent>
     </Card>
