@@ -1,11 +1,30 @@
+"use client"
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar";
 import { Bell } from "lucide-react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { signOut } from "firebase/auth";
+import {auth} from "@/lib/firebase"
+import { useRouter } from "next/navigation";
 
 const HomeNavBar = () => {
+  const [user,setUser] = useState(()=>JSON.parse(localStorage.getItem("user")||""));
+  const router = useRouter();
+  const signOutAccount=()=>{
+    signOut(auth).then(() => {
+      router.push("/login")
+    }).catch((error:any) => {
+      console.log(error.message);
+      
+    });
+  }
   return (
     <nav className="sticky z-50 p-4  backdrop-blur-lg bg-white   dark:bg-gray-950/90 text-brand">
       <div className="px-16">
@@ -25,25 +44,37 @@ const HomeNavBar = () => {
             </Link>
             <Link href={"/login"}><Button size="lg" className="bg-brand">Login</Button></Link>
           </div> */}
-          <ul className="flex space-x-10 text-slate-600 font-semibold">
+          <ul className="flex space-x-10 text-slate-600 font-semibold cursor-pointer">
             <li>
-              <Link href="">Upcoming Tests</Link>
+              <Link href="/home">Dashboard</Link>
             </li>
             <li>
-              <Link href="">Results</Link>
+              <Link href="/upcoming">Upcoming Tests</Link>
             </li>
             <li>
+              <Link href="/results">Results</Link>
+            </li>
+            {/* <li>
               <Link href="">Profile</Link>
-            </li>
-            <li>
+            </li> */}
+            {/* <li>
               <Link href="">Help</Link>
-            </li>
+            </li> */}
           </ul>
           <div className="flex justify-center content-center align-bottom gap-10">
-            <Avatar>
-              <AvatarImage src="/avatar.jpg" className="object-center" />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Avatar>
+                  <AvatarImage src={user?.photoURL||"/avatar.jpg"} className="object-center" />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+              </PopoverTrigger>
+              <PopoverContent className="w-50">
+                <Button onClick={()=>signOutAccount()} variant="destructive">
+                  Logout
+                </Button>
+              </PopoverContent>
+            </Popover>
             <Bell className="place-self-center text-black" />
           </div>
         </div>

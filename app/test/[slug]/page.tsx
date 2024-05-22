@@ -13,15 +13,20 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { data } from "@/app/utils/sampleTestData";
 import { useState } from "react";
 import clsx from "clsx";
-import {Header} from "./components/Header";
+import {Header} from "../components/Header";
 import Link from "next/link";
+import { useParams,useRouter } from "next/navigation";
 
 const page = () => {
-
+  const {slug} = useParams<any>();
+  const id = parseInt(slug)
+  const router = useRouter();
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [selectedOption, setSelectedOption] = useState(new Array(data.length).fill(null));
+  const [quizData,setQuizData] = useState<any>(()=>JSON.parse(localStorage.getItem("upcomingQuiz") || "[]"))
+  const [selectedOption, setSelectedOption] = useState<Array<string | null>>(new Array(quizData[id].quizData.length).fill(null));
   const [answeredCount,setAnsweredCount] = useState(0);
+  const [score, setScore] = useState<number | null>(null);
 
   const handleOptionChange = (option:any) => {
     setSelectedOption((prevOptions) => {
@@ -32,7 +37,7 @@ const page = () => {
   };
 
   const handleNext = () => {
-    setCurrentQuestion((prev) => Math.min(prev + 1, data.length - 1));
+    setCurrentQuestion((prev) => Math.min(prev + 1, quizData[id].quizData.length - 1));
   };
 
   const handleBack = () => {
@@ -42,9 +47,29 @@ const page = () => {
   useEffect(() => {
     setAnsweredCount(selectedOption.filter((option) => option !== null).length);
   },[selectedOption])
-  const unansweredCount = data.length - answeredCount;
+  const calculateScore = () => {
+    let correctAnswers = 0;
+    quizData[id].quizData.forEach((question: any, index: number) => {
+      if (selectedOption[index] === question.answer) {
+        correctAnswers++;
+      }
+    });
+    setScore(correctAnswers);
+    return correctAnswers
+  };
+
   const handleSubmit = () => {
-    // Add logic to submit answers
+    const score = calculateScore();
+    const results = JSON.parse(localStorage.getItem("results")||"[]");
+    const result = {
+      name:quizData[id].name,
+      totalQuestions:quizData[id].quizData.length,
+      correctAnswers:score,
+    }
+    results.push(result);
+    localStorage.setItem("result",JSON.stringify(results));
+    router.push("/home");
+
   };
   return (
     <div
@@ -53,17 +78,17 @@ const page = () => {
         backgroundImage: `url("/mcq_bg.png")`,
       }}
     >
-      <Header/>
-      <div className="flex flex-row m-10 space-x-4 h-[70%]">
-        <Card className="h-full w-[25%] rounded-lg bg-purple-600 p-5 border-0">
+      <Header handleSubmit={handleSubmit}/>
+      <div className="flex flex-row m-5 space-x-4 h-[70%]">
+        <Card className="h-full w-[25%] rounded-lg bg-purple-600 p-2 border-0">
           <CardHeader>
             <CardTitle className="text-lg text-white">DSA Test</CardTitle>
             <CardDescription className="text-white">MCQs</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="overflow-y-auto h-[300px]">
+            <div className="overflow-y-scroll h-[250px]">
               <div className="grid grid-rows-5 grid-cols-5 gap-2">
-                {data.map((item: any, index: number) => (
+                { quizData[id] && quizData[id].quizData.map((item: any, index: number) => (
                   <Button
                     key={index}
                     onClick={() => setCurrentQuestion(index)}
@@ -77,19 +102,19 @@ const page = () => {
                 ))}
               </div>
             </div>
-            <div className="progress font-semibold flex flex-col gap-5 text-white">
-              <div className="flex gap-5 items-center">
-                <div className="p-2 bg-white rounded-sm font-semibold h-10 w-10 text-black" >{data.length-answeredCount}</div>
+            <div className="progress font-semibold flex mt-2 flex-col gap-2 text-white">
+              <div className="flex text-sm gap-5 items-center">
+                <div className="p-2 bg-white rounded-sm font-semibold  text-black" >{data.length-answeredCount}</div>
                 <p>Unanswered</p>
               </div>
-              <div className="flex gap-5 items-center">
-                <div className="p-2 bg-green-600 rounded-sm font-semibold h-10 w-10">
+              <div className="flex gap-5 text-sm items-center">
+                <div className="p-2 bg-green-600 rounded-sm font-semibold ">
                   {answeredCount}
                 </div>
                 <p>Answered</p>
               </div>
-              <div className="flex gap-5 items-center">
-                <div className="p-2 bg-yellow-300 rounded-sm font-semibold h-10 w-10 text-black">3</div>
+              <div className="flex gap-5 text-sm items-center">
+                <div className="p-2 bg-yellow-300 rounded-sm font-semibold  text-black">3</div>
                 <p>Marked for Review</p>
               </div>
             </div>
@@ -98,7 +123,7 @@ const page = () => {
         <div className="bg-white flex flex-col flex-1 rounded-lg p-8">
           <div className="h-full">
             <h2 className="text-xl">
-              {currentQuestion + 1} {data[currentQuestion].question}
+              {currentQuestion + 1} {quizData&&quizData[id].quizData[currentQuestion].question}
             </h2>
             <div className="flex flex-col gap-5 m-5">
               <div className="flex items-center space-x-2">
@@ -106,15 +131,15 @@ const page = () => {
                   type="radio"
                   id="ans1"
                   name="answer"
-                  value={data[currentQuestion].option1}
-                  checked={selectedOption[currentQuestion] === data[currentQuestion].option1}
-                  onChange={() => handleOptionChange(data[currentQuestion].option1)}
+                  value={quizData[id].quizData[currentQuestion].option1}
+                  checked={selectedOption[currentQuestion] === quizData[id].quizData[currentQuestion].option1}
+                  onChange={() => handleOptionChange(quizData[id].quizData[currentQuestion].option1)}
                 />
                 <label
                   htmlFor="ans1"
                   className="text-sm font-medium leading-none cursor-pointer"
                 >
-                  {data[currentQuestion].option1}
+                  {quizData[id].quizData[currentQuestion].option1}
                 </label>
               </div>
               <div className="flex items-center space-x-2">
@@ -122,15 +147,15 @@ const page = () => {
                   type="radio"
                   id="ans2"
                   name="answer"
-                  value={data[currentQuestion].option2}
-                  checked={selectedOption[currentQuestion] === data[currentQuestion].option2}
-                  onChange={() => handleOptionChange(data[currentQuestion].option2)}
+                  value={quizData[id].quizData[currentQuestion].option2}
+                  checked={selectedOption[currentQuestion] === quizData[id].quizData[currentQuestion].option2}
+                  onChange={() => handleOptionChange(quizData[id].quizData[currentQuestion].option2)}
                 />
                 <label
                   htmlFor="ans2"
                   className="text-sm font-medium leading-none cursor-pointer"
                 >
-                  {data[currentQuestion].option2}
+                  {quizData[id].quizData[currentQuestion].option1}
                 </label>
               </div>
               <div className="flex items-center space-x-2">
@@ -138,15 +163,15 @@ const page = () => {
                   type="radio"
                   id="ans3"
                   name="answer"
-                  value={data[currentQuestion].option3}
-                  checked={selectedOption[currentQuestion] === data[currentQuestion].option3}
-                  onChange={() => handleOptionChange(data[currentQuestion].option3)}
+                  value={quizData[id].quizData[currentQuestion].option3}
+                  checked={selectedOption[currentQuestion] === quizData[id].quizData[currentQuestion].option3}
+                  onChange={() => handleOptionChange(quizData[id].quizData[currentQuestion].option3)}
                 />
                 <label
                   htmlFor="ans3"
                   className="text-sm font-medium leading-none cursor-pointer"
                 >
-                  {data[currentQuestion].option3}
+                  {quizData[id].quizData[currentQuestion].option3}
                 </label>
               </div>
               <div className="flex items-center space-x-2">
@@ -154,16 +179,16 @@ const page = () => {
                   type="radio"
                   id="ans4"
                   name="answer"
-                  value={data[currentQuestion].option4}
-                  checked={selectedOption[currentQuestion] === data[currentQuestion].option4}
-                  onChange={() => handleOptionChange(data[currentQuestion].option4)}
+                  value={quizData[id].quizData[currentQuestion].option4}
+                  checked={selectedOption[currentQuestion] === quizData[id].quizData[currentQuestion].option4}
+                  onChange={() => handleOptionChange(quizData[id].quizData[currentQuestion].option4)}
                   
                 />
                 <label
                   htmlFor="ans4"
                   className="text-sm font-medium leading-none cursor-pointer"
                 >
-                  {data[currentQuestion].option4}
+                  {quizData[id].quizData[currentQuestion].option4}
                 </label>
               </div>
             </div>

@@ -34,6 +34,8 @@ import {
 } from "recharts";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import TestCard from "./TestCard";
+import { useState } from "react";
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
@@ -115,16 +117,21 @@ const data2 = [
 ];
 
 export default function StudentDashboard() {
+  const [user,setUser] = useState(()=>JSON.parse(localStorage.getItem("user")||""));
+  const [quizData,setQuizData] = useState(()=>JSON.parse(localStorage.getItem("upcomingQuiz") || "[]"))
+  const [results,setResult] = useState(()=>JSON.parse(localStorage.getItem("result")||"[]"))
+
+
   return (
     <div className="h-full flex flex-row gap-5 p-10">
       <div className="flex flex-col flex-1 gap-2">
         <Card className=" flex bg-white p-5 justify-around rounded-xl shadow-sm">
           <div className="flex flex-col">
             <Avatar className="size-20">
-              <AvatarImage src="/avatar.jpg" className="object-center" />
+              <AvatarImage src={user?.photoURL || "./avatar.jpg"} className="object-center" />
               <AvatarFallback>Ak</AvatarFallback>
             </Avatar>
-            <h2 className="text-md font-semibold mt-1">Aakash Jha</h2>
+            <h2 className="text-md font-semibold mt-1">{user?.displayName}</h2>
             <span className="text-sm">Student</span>
             <Badge
               className=" py-2 px-5 flex gap-5 rounded-lg mt-2 -ml-2"
@@ -233,18 +240,18 @@ export default function StudentDashboard() {
               <h2 className="text-sm font-semibold my-1 text-slate-500">
                 New Tests
               </h2>
-              <h1 className="text-2xl font-semibold my-1 text-blue-500">08</h1>
+              <h1 className="text-2xl font-semibold my-1 text-blue-500">{quizData.length}</h1>
               <h2 className="text-sm font-semibold my-1 text-slate-500">
                 Visited
               </h2>
               <h1 className="text-2xl font-semibold my-1 text-purple-500">
-                13/<span className="text-purple-400">42</span>
+                {results.length}/<span className="text-purple-400">{quizData.length}</span>
               </h1>
               <h2 className="text-sm font-semibold my-1 text-slate-500">
                 Completed
               </h2>
               <h1 className="text-2xl font-semibold my-1 text-orange-500">
-                08/<span className="text-orange-400">12</span>
+              {results.length}/<span className="text-orange-400">{quizData.length}</span>
               </h1>
             </div>
             <div className="w-[400px] h-[200px]">
@@ -276,22 +283,7 @@ export default function StudentDashboard() {
             <div>8h 30 m</div>
           </div>
         </Card>
-        <Card>
-          <CardHeader className="flex flex-row justify-between">
-            <CardTitle className="text-md text-slate-500">
-              Today's Course
-            </CardTitle>
-            <ArrowRightIcon />
-          </CardHeader>
-          <CardContent className="flex flex-row justify-between">
-            <CardDescription className="text-lg font-semibold text-slate-800">
-              08 April Test
-            </CardDescription>
-            <Link href={"/test"}>
-              <Button>Start</Button>
-            </Link>
-          </CardContent>
-        </Card>
+        {quizData.length>0 &&<TestCard title={quizData[0].name} date={quizData[0].date} id={0}/>}
       </div>
     </div>
   );
