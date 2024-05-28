@@ -35,6 +35,7 @@ const Navbar = () => {
                 </Button>
             </Link>
             <Link href={"/login"}><Button size="lg" className="bg-brand">Login</Button></Link>
+            <Link href={"/admin"}><Button size="lg" className="bg-blue-400">Admin</Button></Link>
           </div>
         </div>
       </div>
